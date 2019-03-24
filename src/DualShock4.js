@@ -99,17 +99,13 @@ export default class DualShock4 extends Component {
       }, () => {
         this.props.onClose(this.props.index);
         Animated.parallel([
-          Animated.spring(this.cardSize.x, {
+          Animated.timing(this.cardSize.x, {
             toValue: CARD_WIDTH,
-            // friction: 4,
-            // tension: 15,
-            speed: 12,
+            duration: 200
           }),
-          Animated.spring(this.cardSize.y, {
+          Animated.timing(this.cardSize.y, {
             toValue: CARD_HEIGHT,
-            // friction: 4,
-            // tension: 15,
-            speed: 12,
+            duration: 200
           }),
           Animated.spring(this.titleTranslateX, {
             toValue: 0,
@@ -121,14 +117,12 @@ export default class DualShock4 extends Component {
           }),
           Animated.spring(this.imageTranslateY, {
             toValue: 0,
-            friction: 4,
-            tension: 15,
-          }),
-          Animated.spring(this.imageRotate, {
-            toValue: 0,
             // friction: 4,
             // tension: 15,
-            speed: 12,
+          }),
+          Animated.timing(this.imageRotate, {
+            toValue: 0,
+            duration: 200,
           }),
           Animated.spring(this.footerImageScale, {
             toValue: 0,
@@ -139,7 +133,7 @@ export default class DualShock4 extends Component {
           }),
           Animated.timing(this.previewTextOpacity, {
             toValue: 1,
-            duration: 300,
+            duration: 200,
             delay: 300,
           }),
         ]).start();
@@ -150,13 +144,13 @@ export default class DualShock4 extends Component {
         isActive: true,
       }, () => {
         Animated.parallel([
-          Animated.spring(this.cardSize.x, {
+          Animated.timing(this.cardSize.x, {
             toValue: DEVICE_WIDTH,
-            speed: 12,
+            duration: 200
           }),
-          Animated.spring(this.cardSize.y, {
+          Animated.timing(this.cardSize.y, {
             toValue: DEVIC_HEIGHT,
-            speed: 12,
+            duration: 200
           }),
           Animated.spring(this.titleTranslateX, {
             toValue: DEVIC_HEIGHT,
@@ -168,25 +162,25 @@ export default class DualShock4 extends Component {
           }),
           Animated.spring(this.imageTranslateY, {
             toValue: DEVIC_HEIGHT/2,
-            friction: 4,
-            tension: 15,
-            // speed: 12,
-          }),
-          Animated.spring(this.imageRotate, {
-            toValue: 1,
             // friction: 4,
             // tension: 15,
-            speed: 12,
+            // speed: 1,
+          }),
+          Animated.timing(this.imageRotate, {
+            toValue: 1,
+            duration: 200,
           }),
           Animated.spring(this.footerImageScale, {
             toValue: 1,
-            friction: 4,
-            tension: 1,
+            // friction: 4,
+            // tension: 1,
+            friction: 5.5,
+            tension: 10
             // speed: 12,
           }),
           Animated.timing(this.activeTextOpacity, {
             toValue: 1,
-            duration: 300,
+            duration: 200,
             delay: 300,
           }),
           Animated.timing(this.previewTextOpacity, {
@@ -196,43 +190,6 @@ export default class DualShock4 extends Component {
         ]).start();
       });
     }
-
-    // setTimeout(() => {
-    //   this.setState({
-    //     isActive: false,
-    //   }, () => {
-    //     Animated.parallel([
-    //       Animated.spring(this.cardSize.x, {
-    //         toValue: CARD_WIDTH,
-    //         // friction: 4,
-    //         // tension: 15,
-    //         speed: 12,
-    //       }),
-    //       Animated.spring(this.cardSize.y, {
-    //         toValue: CARD_HEIGHT,
-    //         // friction: 4,
-    //         // tension: 15,
-    //         speed: 12,
-    //       }),
-    //       Animated.spring(this.imageTranslateY, {
-    //         toValue: 0,
-    //         friction: 4,
-    //         tension: 15,
-    //       }),
-    //       Animated.spring(this.imageRotate, {
-    //         toValue: 0,
-    //         // friction: 4,
-    //         // tension: 15,
-    //         speed: 12,
-    //       }),
-    //       Animated.timing(this.paragraphOpacity, {
-    //         toValue: 0,
-    //         duration: 300,
-    //         delay: 300,
-    //       }),
-    //     ]).start();
-    //   });
-    // }, 5000);
   }
 
   render() {
@@ -342,7 +299,7 @@ export default class DualShock4 extends Component {
             <Animated.View
               style={{
                 marginBottom: 66,
-                opacity: this.activeTextOpacity,
+                opacity: this.state.isActive ? 1 : 0,
                 transform: [{
                   translateX: this.titleTranslateX.interpolate({
                     inputRange: [0, DEVIC_HEIGHT],

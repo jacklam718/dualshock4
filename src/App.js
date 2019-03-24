@@ -7,6 +7,7 @@ import {
   View,
   Dimensions,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import GradientBackgrounds from './GradientBackgrounds';
 import DualShock4 from './DualShock4';
@@ -41,7 +42,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center',
-  }
+  },
+  skipButton: {
+    position: 'absolute',
+    top: 50,
+    right: 25,
+  },
 });
 
 const pages = [
@@ -59,27 +65,6 @@ const pages = [
     name: 'DUALSHOCK 4',
     price: '$54',
   },
-  // {
-  //   image: require('../assets/blue.png'),
-  //   backgroundColor: '#527AD3',
-  //   title: 'WAWE BLUE',
-  //   name: 'DUALSHOCK 4',
-  //   price: '$54',
-  // },
-  // {
-  //   image: require('../assets/blue.png'),
-  //   backgroundColor: '#527AD3',
-  //   title: 'WAWE BLUE',
-  //   name: 'DUALSHOCK 4',
-  //   price: '$54',
-  // },
-  // {
-  //   image: require('../assets/blue.png'),
-  //   backgroundColor: '#527AD3',
-  //   title: 'WAWE BLUE',
-  //   name: 'DUALSHOCK 4',
-  //   price: '$54',
-  // },
 ]
 
 export default class App extends React.Component {
@@ -116,6 +101,21 @@ export default class App extends React.Component {
           backgroundColor="blue"
           barStyle="light-content"
         />
+
+        <TouchableOpacity
+          style={styles.skipButton}
+        >
+          <Text style={{ color: '#fff' }}>
+            SKIP
+          </Text>
+        </TouchableOpacity>
+
+        <View style={styles.indicator}>
+          <Indicator
+            scrollX={this.scrollX}
+            count={pages.length}
+          />
+        </View>
 
         <Animated.ScrollView
           ref={this.scrollRef}
@@ -156,17 +156,6 @@ export default class App extends React.Component {
             />
           ))}
         </Animated.ScrollView>
-
-        {
-          !this.state.isOpen ? (
-            <View style={styles.indicator}>
-              <Indicator
-                scrollX={this.scrollX}
-                count={pages.length}
-              />
-            </View>
-          ) : null
-        }
       </View>
     );
   }
