@@ -12,6 +12,7 @@ import {
 import GradientBackgrounds from './GradientBackgrounds';
 import DualShock4 from './DualShock4';
 import Indicator from './Indicator';
+import ProductCarousel from './ProductCarousel';
 
 const {
   width: deviceWidth,
@@ -50,17 +51,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const pages = [
+const products = [
   {
     image: require('../assets/red.png'),
-    backgroundColor: '#EB4A52',
+    color: '#EB4A52',
     title: 'WAWE RED',
     name: 'DUALSHOCK 4',
     price: '$64',
   },
   {
     image: require('../assets/blue.png'),
-    backgroundColor: '#527AD3',
+    color: '#527AD3',
     title: 'WAWE BLUE',
     name: 'DUALSHOCK 4',
     price: '$54',
@@ -68,83 +69,22 @@ const pages = [
 ]
 
 export default class App extends React.Component {
-  scrollRef = React.createRef();
   scrollX = new Animated.Value(0);
   state = {
-    height: 0,
     isOpen: false,
-  }
-
-  onLayout = e => {
-    this.setState({
-      height: e.nativeEvent.layout.height,
-    });
-  };
-
-  scrollTo = (index) => {
-    this.scrollRef.current._component.scrollTo({
-      y: ROW_HEIGHT * index,
-      animated: true,
-    });
   }
 
   render() {
     return (
       <View style={styles.container}>
-
-        <GradientBackgrounds
-          scrollX={this.scrollX}
-          colors={pages.map(i => i.backgroundColor)}
-        />
-
-        <StatusBar
-          backgroundColor="blue"
-          barStyle="light-content"
-        />
-
-        <TouchableOpacity
-          style={styles.skipButton}
-        >
-          <Text style={{ color: '#fff' }}>
-            SKIP
-          </Text>
-        </TouchableOpacity>
-
-        <View style={styles.indicator}>
-          <Indicator
-            scrollX={this.scrollX}
-            count={pages.length}
-          />
-        </View>
-
-        <Animated.ScrollView
-          ref={this.scrollRef}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          bounces={false}
-          decelerationRate="fast"
-          scrollEventThrottle={1}
-          onLayout={this.onLayout}
+        <ProductCarousel
+          products={products}
           scrollEnabled={!this.state.isOpen}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: { x: this.scrollX },
-                },
-              },
-            ],
-            {
-              useNativeDriver: false,
-            }
-          )}
-        >
-          {pages.map((item, index) => (
+          renderItem={({ item, index, scrollX }) => (
             <DualShock4
               pointerEvents={'auto'}
               key={`page-${index}`}
-              scrollX={this.scrollX}
+              scrollX={scrollX}
               index={index}
               item={item}
               onOpen={() => {
@@ -154,8 +94,14 @@ export default class App extends React.Component {
                 this.setState({ isOpen: false });
               }}
             />
-          ))}
-        </Animated.ScrollView>
+          )}
+        />
+
+        <TouchableOpacity style={styles.skipButton}>
+          <Text style={{ color: '#fff' }}>
+            SKIP
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }

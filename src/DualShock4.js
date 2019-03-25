@@ -41,19 +41,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'transparent',
   },
-  card: {
-    borderRadius: 15,
-    width: CARD_WIDTH,
-    backgroundColor: '#fff',
-    height: CARD_HEIGHT,
-    shadowColor: "black",
-    shadowOpacity: 0.3,
-    shadowOffset: {
-      width: 0,
-      height: 15
-    },
-    shadowRadius: 25
-  },
   imageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -109,16 +96,11 @@ export default class DualShock4 extends Component {
           }),
           Animated.spring(this.titleTranslateX, {
             toValue: 0,
-            // friction: 1,
-            // tension: 1,
-            // speed: 12,
             friction: 4.5,
             tension: 0.5,
           }),
           Animated.spring(this.imageTranslateY, {
             toValue: 0,
-            // friction: 4,
-            // tension: 15,
           }),
           Animated.timing(this.imageRotate, {
             toValue: 0,
@@ -192,6 +174,171 @@ export default class DualShock4 extends Component {
     }
   }
 
+  renderPreviewTitle() {
+    return (
+      <Animated.View
+        style={{
+          top: 50,
+          position: 'absolute',
+          opacity: this.previewTextOpacity,
+          transform: [{
+            translateX: this.props.scrollX.interpolate({
+              inputRange: this.inputRange,
+              outputRange: [0, -DEVICE_WIDTH * 0.1],
+            }),
+          }],
+        }}
+      >
+        <Heading3>
+          MAGMA RED
+        </Heading3>
+      </Animated.View>
+    );
+  }
+
+  renderPreviewPrice() {
+    return (
+      <Animated.View
+        style={{
+          top: 90,
+          position: 'absolute',
+          opacity: this.previewTextOpacity,
+          height: 40,
+          transform: [{
+            translateX: this.props.scrollX.interpolate({
+              inputRange: this.inputRange,
+              outputRange: [0, -DEVICE_WIDTH * 0.4],
+            }),
+          }],
+        }}
+      >
+        <Heading4>
+          {this.props.item.price}
+        </Heading4>
+      </Animated.View>
+    );
+  }
+
+  renderDetailTitle() {
+    return (
+      <View
+        style={{
+          position: 'absolute', 
+          top: 140,
+          height: 300,
+          left: 0
+        }}
+      >
+        <Animated.View
+          style={{
+            marginBottom: 66,
+            opacity: this.state.isActive ? 1 : 0,
+            transform: [{
+              translateX: this.titleTranslateX.interpolate({
+                inputRange: [0, DEVIC_HEIGHT],
+                outputRange: [-300, 0],
+              }),
+            }],
+          }}
+        >
+          <HeaderTitle style={{ position: 'absolute' }}>
+            {this.props.item.title.split(' ')[0]}
+          </HeaderTitle>
+        </Animated.View>
+        <Animated.View
+          style={{
+            transform: [{
+              translateX: this.titleTranslateX.interpolate({
+                inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
+                outputRange: [-500, 0],
+              }),
+            }],
+          }}
+        >
+          <HeaderTitle style={{ position: 'absolute' }}>
+            {this.props.item.title.split(' ')[1]}
+          </HeaderTitle>
+        </Animated.View>
+      </View>
+    );
+  }
+
+  renderDetailDecription() {
+    return (
+      <Animated.View
+        style={{
+          position: 'absolute',
+          padding: 20,
+          top: 140 + 160,
+          opacity: this.activeTextOpacity,
+        }}
+      >
+        <Heading4>
+          DualShock 4
+        </Heading4>
+        <Heading1>
+          Wireless Controller
+        </Heading1>
+        <Paragraph>
+          The DualShock®4 Wireless Controller for PlayStation®4 defines the next generation of play, combining revolutionary new features with intuitive, precision controls.
+        </Paragraph>
+      </Animated.View>
+    );
+  }
+
+  renderDetailPrice() {
+    return this.state.isActive ? (
+      <Animated.View
+        style={{
+          opacity: this.activeTextOpacity,
+          transform: [{
+            translateX: this.cardSize.y.interpolate({
+              inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
+              outputRange: [0, 100],
+            }),
+          }, {
+            translateY: this.cardSize.y.interpolate({
+              inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
+              outputRange: [0, 60],
+            }),
+          }],
+        }}
+      >
+        <Heading2>
+          {this.props.item.price}
+        </Heading2>
+      </Animated.View>
+    ) : null;
+  }
+
+  renderDetailFooterImage() {
+    return (
+      <Animated.View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          opacity: this.state.isActive ? 1 : 0,
+          transform: [{
+            scale: this.footerImageScale.interpolate({
+              inputRange: [0, 1],
+              outputRange: [3, 1],
+            })
+          }, {
+            translateY: this.footerImageScale.interpolate({
+              inputRange: [0, 1],
+              outputRange: [200, 0],
+            }),
+          }]
+        }}
+      > 
+        <Animated.Image
+          resizeMode="contain"
+          source={require('../assets/photos.png')}
+        />
+      </Animated.View>
+    )
+  }
+
   render() {
     const { scrollX, index, item } = this.props;
 
@@ -199,7 +346,6 @@ export default class DualShock4 extends Component {
       <View style={styles.page}>
         <Card
           style={StyleSheet.flatten([
-            styles.card,
             {
               width: this.cardSize.x,
               height: this.cardSize.y,
@@ -212,50 +358,15 @@ export default class DualShock4 extends Component {
             },
           ])}
         >
-          <Animated.View
-            style={{
-              // marginTop: 10,
-              // marginBottom: 10,
-              top: 50,
-              position: 'absolute',
-              opacity: this.previewTextOpacity,
-              transform: [{
-                translateX: scrollX.interpolate({
-                  inputRange: this.inputRange,
-                  outputRange: [0, -DEVICE_WIDTH * 0.1],
-                }),
-              }],
-            }}
-          >
-            <Heading3>
-              MAGMA RED
-            </Heading3>
-          </Animated.View>
-          <Animated.View
-            style={{
-              top: 90,
-              position: 'absolute',
-              opacity: this.previewTextOpacity,
-              height: 40,
-              transform: [{
-                translateX: scrollX.interpolate({
-                  inputRange: this.inputRange,
-                  outputRange: [0, -DEVICE_WIDTH * 0.4],
-                }),
-              }],
-            }}
-          >
-            <Heading4>
-              {item.price}
-            </Heading4>
-          </Animated.View>
+          {this.renderPreviewTitle()}
+          {this.renderPreviewPrice()}
           <Animated.View
             shouldRasterizeIOS
             renderToHardwareTextureAndroid
             style={StyleSheet.flatten([
               styles.imageContainer,
               // { marginTop: DEVIC_HEIGHT * 0.08 },
-              { marginTop: this.state.isActive ? 110 : 50 },
+              { marginTop: this.state.isActive ? 100 : 50 },
               {
                 transform: [{
                   translateX: scrollX.interpolate({
@@ -295,65 +406,11 @@ export default class DualShock4 extends Component {
             />
           </Animated.View>
 
-          <View style={{ position: 'absolute', top: 140, height: 300, left: 0 }}>
-            <Animated.View
-              style={{
-                marginBottom: 66,
-                opacity: this.state.isActive ? 1 : 0,
-                transform: [{
-                  translateX: this.titleTranslateX.interpolate({
-                    inputRange: [0, DEVIC_HEIGHT],
-                    outputRange: [-300, 0],
-                  }),
-                }],
-              }}
-            >
-              <HeaderTitle style={{ position: 'absolute' }}>
-                {item.title.split(' ')[0]}
-              </HeaderTitle>
-            </Animated.View>
-            <Animated.View
-              style={{
-                transform: [{
-                  translateX: this.titleTranslateX.interpolate({
-                    inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
-                    outputRange: [-500, 0],
-                  }),
-                }],
-              }}
-            >
-              <HeaderTitle style={{ position: 'absolute' }}>
-                {item.title.split(' ')[1]}
-              </HeaderTitle>
-            </Animated.View>
-          </View>
-
+          {this.renderDetailTitle()}
+          {this.renderDetailDecription()}
+          
           <Animated.View
             style={{
-              position: 'absolute',
-              padding: 20,
-              top: 140 + 160,
-              opacity: this.activeTextOpacity,
-              // opacity: this.cardSize.y.interpolate({
-              //   inputRange: [-200, DEVIC_HEIGHT],
-              //   outputRange: [-10, 1],
-              // })
-            }}
-          >
-            <Heading4>
-              DualShock 4
-            </Heading4>
-            <Heading1>
-              Wireless Controller
-            </Heading1>
-            <Paragraph>
-              The DualShock®4 Wireless Controller for PlayStation®4 defines the next generation of play, combining revolutionary new features with intuitive, precision controls.
-            </Paragraph>
-          </Animated.View>
-          <Animated.View
-            style={{
-              // flex: 1,
-              // flexDirection: 'row',
               transform: [{
                 translateX: this.cardSize.y.interpolate({
                   inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
@@ -372,30 +429,8 @@ export default class DualShock4 extends Component {
               onPress={this.showDetails}
             />
           </Animated.View>
-          {
-            this.state.isActive ? (
-              <Animated.View
-                style={{
-                  opacity: this.activeTextOpacity,
-                  transform: [{
-                    translateX: this.cardSize.y.interpolate({
-                      inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
-                      outputRange: [0, 100],
-                    }),
-                  }, {
-                    translateY: this.cardSize.y.interpolate({
-                      inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
-                      outputRange: [0, 60],
-                    }),
-                  }],
-                }}
-              >
-                <Heading2>
-                  {item.price}
-                </Heading2>
-              </Animated.View>
-            ) : null
-          }
+          
+          {this.renderDetailPrice()}
           <Animated.View
             style={{
               opacity: this.previewTextOpacity,
@@ -412,81 +447,7 @@ export default class DualShock4 extends Component {
             </Heading5>
           </Animated.View>
 
-          <Animated.View
-            style={{
-              position: 'absolute',
-              bottom: 20,
-              opacity: this.state.isActive ? 1 : 0,
-              transform: [{
-                scale: this.footerImageScale.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [3, 1],
-                })
-              }, {
-                translateY: this.footerImageScale.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [200, 0],
-                }),
-              }]
-            }}
-          > 
-            <Animated.Image
-              resizeMode="contain"
-              source={require('../assets/photos.png')}
-            />
-          </Animated.View>
-
-          {/* <Heading5>
-            {`${this.state.isActive}`}
-          </Heading5> */}
-          {/* <Slider
-            style={{ width: 200 }}
-            onValueChange={(value) => {
-              // Animated.parallel([
-              //   Animated.spring(this.titleTranslateX, {
-              //     toValue: value * DEVIC_HEIGHT,
-              //     friction: 4.5,
-              //     tension: 0.5,
-              //   }),
-              // ]).start();
-              console.log('value: ', value)
-              Animated.parallel([
-                Animated.spring(this.cardSize.x, {
-                  toValue: Math.max(value * DEVICE_WIDTH, CARD_WIDTH),
-                  speed: 100,
-                }),
-                Animated.spring(this.cardSize.y, {
-                  toValue: Math.max(value * DEVIC_HEIGHT, CARD_HEIGHT),
-                  speed: 100,
-                }),
-                Animated.spring(this.titleTranslateX, {
-                  toValue: value * DEVIC_HEIGHT,
-                  // friction: 1,
-                  // tension: 1,
-                  // speed: 12,
-                  friction: 4.5,
-                  tension: 0.5,
-                }),
-                Animated.spring(this.imageTranslateY, {
-                  toValue: Math.max(value * DEVIC_HEIGHT/2, 0),
-                  friction: 4,
-                  tension: 15,
-                  // speed: 12,
-                }),
-                Animated.spring(this.imageRotate, {
-                  toValue: value,
-                  // friction: 4,
-                  // tension: 15,
-                  speed: 12,
-                }),
-                Animated.timing(this.paragraphOpacity, {
-                  toValue: value,
-                  delay: 300,
-                  duration: 300,
-                }),
-              ]).start();
-            }}
-          /> */}
+          {this.renderDetailFooterImage()}
         </Card>
       </View>
     );

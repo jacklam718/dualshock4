@@ -1,5 +1,3 @@
-// @flow
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -21,7 +19,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function GradientBackgrounds({ scrollX, style, colors }: Props) {
+export default function GradientBackgrounds({ scrollX, style, colors }) {
   return (
     <View style={[styles.container, style]}>
       {colors.map((color, index) => (
