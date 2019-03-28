@@ -231,8 +231,7 @@ export default class DualShock4 extends Component {
       <View
         style={{
           position: 'absolute', 
-          top: 140,
-          height: 300,
+          top: 160,
           left: 0
         }}
       >
@@ -248,23 +247,28 @@ export default class DualShock4 extends Component {
             }],
           }}
         >
-          <HeaderTitle style={{ position: 'absolute' }}>
-            {this.props.item.title.split(' ')[0]}
-          </HeaderTitle>
+          <Animated.Image
+            resizeMode="contain"
+            style={{ position: 'absolute' }}
+            source={this.props.item.imageTitle1}
+          />
         </Animated.View>
         <Animated.View
           style={{
             transform: [{
               translateX: this.titleTranslateX.interpolate({
                 inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
-                outputRange: [-500, 0],
+                outputRange: [-400, 0],
               }),
             }],
           }}
         >
-          <HeaderTitle style={{ position: 'absolute' }}>
-            {this.props.item.title.split(' ')[1]}
-          </HeaderTitle>
+          <Animated.Image
+            resizeMode="contain"
+            style={{ position: 'absolute' }}
+            source={this.props.item.imageTitle2}
+
+          />
         </Animated.View>
       </View>
     );
@@ -409,7 +413,7 @@ export default class DualShock4 extends Component {
           >
             <Animated.Image
               resizeMode="contain"
-              source={item.image}
+              source={item.goodsImage}
             />
           </Animated.View>
 
@@ -438,6 +442,7 @@ export default class DualShock4 extends Component {
           </Animated.View>
           
           {this.renderDetailPrice()}
+
           <Animated.View
             style={{
               opacity: this.previewTextOpacity,

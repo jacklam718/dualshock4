@@ -53,14 +53,18 @@ const styles = StyleSheet.create({
 
 const products = [
   {
-    image: require('../assets/red.png'),
+    goodsImage: require('../assets/red.png'),
+    imageTitle1: require('../assets/title_wave.png'),
+    imageTitle2: require('../assets/title_red.png'),
     color: '#EB4A52',
     title: 'WAWE RED',
     name: 'DUALSHOCK 4',
     price: '$64',
   },
   {
-    image: require('../assets/blue.png'),
+    goodsImage: require('../assets/blue.png'),
+    imageTitle1: require('../assets/title_wave.png'),
+    imageTitle2: require('../assets/title_red.png'),
     color: '#527AD3',
     title: 'WAWE BLUE',
     name: 'DUALSHOCK 4',
