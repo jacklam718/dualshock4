@@ -31,6 +31,11 @@ const styles = StyleSheet.create({
 
 export default class ProductCarousel extends Component {
   scrollX = new Animated.Value(0);
+  progress = new Animated.Value(0);
+
+  onScroll = (e) => {
+    this.progress.setValue(e.nativeEvent.contentOffset.x);
+  }
 
   renderCards() {
     return this.props.products.map((item, index) => {
@@ -52,8 +57,8 @@ export default class ProductCarousel extends Component {
 
         <View style={styles.indicator}>
           <Indicator
-            scrollX={this.scrollX}
             count={this.props.products.length}
+            progress={this.progress}
           />
         </View>
 
@@ -77,6 +82,7 @@ export default class ProductCarousel extends Component {
             ],
             {
               useNativeDriver: true,
+              listener: this.onScroll,
             }
           )}
         >
