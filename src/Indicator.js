@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Animated, StyleSheet, Dimensions } from 'react-native';
+import { deviceWidth } from './env';
 
-const { width: DEVICE_WIDTH } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 export default function Indicator({ progress, count, style }) {
   const dots = [];
   for (let i = 0; i < count; i++) {
-    const inputRange = [DEVICE_WIDTH * (i-1), DEVICE_WIDTH * i, DEVICE_WIDTH * (i+1)];
+    const inputRange = [deviceWidth * (i-1), deviceWidth * i, deviceWidth * (i+1)];
     const size = progress.interpolate({
       inputRange,
       outputRange: [6, 10, 6],

@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { View, ScrollView, StyleSheet, Animated, Dimensions, Platform } from 'react-native'; 
+import { isIphoneX, deviceWidth } from './env';
 import GradientBackgrounds from './GradientBackgrounds';
 import Indicator from './Indicator';
-
-const {
-  width: deviceWidth,
-  height: deviceHeight,
-} = Dimensions.get('window');
-
-const isIphoneX = Platform.OS === 'ios' && (deviceHeight === 812 || deviceWidth === 812);
 
 const styles = StyleSheet.create({
   container: {

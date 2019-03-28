@@ -9,44 +9,17 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import GradientBackgrounds from './GradientBackgrounds';
+import { isIphoneX } from './env';
 import DualShock4 from './DualShock4';
-import Indicator from './Indicator';
 import ProductCarousel from './ProductCarousel';
-
-const {
-  width: deviceWidth,
-  height: deviceHeight,
-} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  page: {
-    width: deviceWidth,
-    backgroundColor: 'transparent',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 28,
-    backgroundColor: "transparent",
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15
-  },
-  card: {
-    backgroundColor: '#fff',
-  },
-  indicator: {
-    position: "absolute",
-    bottom: 70,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
   skipButton: {
     position: 'absolute',
-    top: 50,
+    top: isIphoneX ? 50 : 40,
     right: 25,
   },
 });
@@ -81,6 +54,11 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar
+          backgroundColor="black"
+          barStyle="light-content"
+        />
+
         <ProductCarousel
           products={products}
           scrollEnabled={!this.state.isOpen}

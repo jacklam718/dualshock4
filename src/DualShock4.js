@@ -17,29 +17,14 @@ import {
   Heading5,
   Paragraph
 } from './Text';
+import { deviceWidth, deviceHeight } from './env';
 import Card from './Card';
 import Button from './Button';
 import Indicator from './Indicator';
 
-const {
-  width: deviceWidth,
-  height: deviceHeight,
-} = Dimensions.get('window');
-
-const {
-  width: DEVICE_WIDTH,
-  height: DEVIC_HEIGHT,
-} = Dimensions.get('window');
-
-const CARD_WIDTH = DEVICE_WIDTH * 0.85;
-const CARD_HEIGHT = DEVIC_HEIGHT * 0.65;
-
 const styles = StyleSheet.create({
-  content: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   imageContainer: {
+    marginTop: 50,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
@@ -53,11 +38,10 @@ export default class DualShock4 extends Component {
   }
 
   cardSize = new Animated.ValueXY({
-    x: CARD_WIDTH,
-    y: CARD_HEIGHT,
+    x: 0,
+    y: 0,
   });
 
-  // animatedButton = 
   titleTranslateX = new Animated.Value(0);
   imageRotate = new Animated.Value(0);
   imageTranslateY = new Animated.Value(0);
@@ -69,8 +53,8 @@ export default class DualShock4 extends Component {
   activeTextOpacity = new Animated.Value(0);
 
   inputRange = [
-    DEVICE_WIDTH * this.props.index,
-    DEVICE_WIDTH * (this.props.index + 1),
+    deviceWidth * this.props.index,
+    deviceWidth * (this.props.index + 1),
   ];
 
   state = {
@@ -135,23 +119,23 @@ export default class DualShock4 extends Component {
       }, () => {
         Animated.parallel([
           Animated.timing(this.cardSize.x, {
-            toValue: DEVICE_WIDTH,
+            toValue: deviceWidth,
             duration: 200,
             useNativeDriver: false,
           }),
           Animated.timing(this.cardSize.y, {
-            toValue: DEVIC_HEIGHT,
+            toValue: deviceHeight,
             duration: 200,
             useNativeDriver: false,
           }),
           Animated.spring(this.titleTranslateX, {
-            toValue: DEVIC_HEIGHT,
+            toValue: deviceHeight,
             friction: 4.5,
             tension: 0.5,
             useNativeDriver: true,
           }),
           Animated.spring(this.imageTranslateY, {
-            toValue: DEVIC_HEIGHT/2,
+            toValue: deviceHeight/2,
             useNativeDriver: true,
           }),
           Animated.timing(this.imageRotate, {
@@ -185,13 +169,11 @@ export default class DualShock4 extends Component {
     return !this.state.isActive ? (
       <Animated.View
         style={{
-          // top: 50,
-          // position: 'absolute',
           opacity: this.previewTextOpacity,
           transform: [{
             translateX: this.props.scrollX.interpolate({
               inputRange: this.inputRange,
-              outputRange: [0, -DEVICE_WIDTH * 0.1],
+              outputRange: [0, -deviceWidth * 0.1],
             }),
           }],
         }}
@@ -207,14 +189,11 @@ export default class DualShock4 extends Component {
     return !this.state.isActive ? (
       <Animated.View
         style={{
-          // top: 90,
-          // position: 'absolute',
           opacity: this.previewTextOpacity,
-          // height: 40,
           transform: [{
             translateX: this.props.scrollX.interpolate({
               inputRange: this.inputRange,
-              outputRange: [0, -DEVICE_WIDTH * 0.4],
+              outputRange: [0, -deviceWidth * 0.4],
             }),
           }],
         }}
@@ -234,7 +213,7 @@ export default class DualShock4 extends Component {
           transform: [{
             translateX: this.props.scrollX.interpolate({
               inputRange: this.inputRange,
-              outputRange: [0, -DEVICE_WIDTH * 0.2],
+              outputRange: [0, -deviceWidth * 0.2],
             }),
           }],
         }}
@@ -261,8 +240,8 @@ export default class DualShock4 extends Component {
             opacity: this.state.isActive ? 1 : 0,
             transform: [{
               translateX: this.titleTranslateX.interpolate({
-                inputRange: [0, DEVIC_HEIGHT],
-                outputRange: [-300, 0],
+                inputRange: [0, deviceHeight],
+                outputRange: [-deviceWidth, 0],
               }),
             }],
           }}
@@ -277,8 +256,8 @@ export default class DualShock4 extends Component {
           style={{
             transform: [{
               translateX: this.titleTranslateX.interpolate({
-                inputRange: [this.state.height, DEVIC_HEIGHT],
-                outputRange: [-400, 0],
+                inputRange: [this.state.height, deviceHeight],
+                outputRange: [-deviceWidth, 0],
               }),
             }],
           }}
@@ -323,12 +302,12 @@ export default class DualShock4 extends Component {
           opacity: this.activeTextOpacity,
           transform: [{
             translateX: this.cardSize.y.interpolate({
-              inputRange: [this.state.height, DEVIC_HEIGHT],
+              inputRange: [this.state.height, deviceHeight],
               outputRange: [0, 100],
             }),
           }, {
             translateY: this.cardSize.y.interpolate({
-              inputRange: [this.state.height, DEVIC_HEIGHT],
+              inputRange: [this.state.height, deviceHeight],
               outputRange: [0, 60],
             }),
           }],
@@ -403,7 +382,7 @@ export default class DualShock4 extends Component {
           cardSize,
           {
             borderRadius: this.cardSize.y.interpolate({
-              inputRange: [height, DEVIC_HEIGHT],
+              inputRange: [height, deviceHeight],
               outputRange: [15, 0],
             }),
           },
@@ -416,21 +395,16 @@ export default class DualShock4 extends Component {
           renderToHardwareTextureAndroid
           style={StyleSheet.flatten([
             styles.imageContainer,
-            // { marginTop: DEVIC_HEIGHT * 0.08 },
-            { marginTop: this.state.isActive ? 50 : 50 },
             {
               transform: [{
                 translateX: scrollX.interpolate({
                   inputRange: this.inputRange,
-                  outputRange: [0, -DEVICE_WIDTH * 0.5],
+                  outputRange: [0, -deviceWidth * 0.5],
                 }),
               }, {
                 translateY: this.imageTranslateY.interpolate({
-                  inputRange: [
-                    0,
-                    DEVIC_HEIGHT/2,
-                  ],
-                  outputRange: [0, -DEVIC_HEIGHT/2],
+                  inputRange: [0, deviceHeight/2],
+                  outputRange: [0, -deviceHeight/2],
                 }),
               }, {
                 rotate: this.imageRotate.interpolate({
@@ -438,13 +412,8 @@ export default class DualShock4 extends Component {
                   outputRange: ['0deg', '180deg'],
                 }),
               }, {
-                scaleX: this.imageTranslateY.interpolate({
-                  inputRange: [0, DEVIC_HEIGHT/2],
-                  outputRange: [1, 1.55],
-                }),
-              }, {
-                scaleY: this.imageTranslateY.interpolate({
-                  inputRange: [0, DEVIC_HEIGHT/2],
+                scale: this.imageTranslateY.interpolate({
+                  inputRange: [0, deviceHeight/2],
                   outputRange: [1, 1.55],
                 }),
               }],
@@ -464,12 +433,12 @@ export default class DualShock4 extends Component {
           style={{
             transform: [{
               translateX: this.cardSize.y.interpolate({
-                inputRange: [height, DEVIC_HEIGHT],
+                inputRange: [height, deviceHeight],
                 outputRange: [0, -60],
               }),
             }, {
               translateY: this.cardSize.y.interpolate({
-                inputRange: [height, DEVIC_HEIGHT],
+                inputRange: [height, deviceHeight],
                 outputRange: [0, 100],
               }),
             }],
@@ -482,9 +451,7 @@ export default class DualShock4 extends Component {
         </Animated.View>
         
         {this.renderDetailPrice()}
-
         {this.renderPreviewName()}
-
         {this.renderDetailFooterImage()}
       </Card>
     );

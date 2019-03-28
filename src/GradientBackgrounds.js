@@ -1,15 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Animated,
-  StyleSheet,
-  Dimensions,
-  Platform,
-} from 'react-native';
-
-const { height: deviceHeight, width: deviceWidth } = Dimensions.get('window');
-const isAdroid = Platform.OS === 'android';
+import { View, Animated, StyleSheet } from 'react-native';
+import { deviceWidth, deviceHeight, isAdroid } from './env';
 
 const styles = StyleSheet.create({
   container: {

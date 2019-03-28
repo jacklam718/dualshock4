@@ -1,21 +1,5 @@
-// @flow
-
-import React, { Component } from 'react';
-import {
-  View,
-  Image,
-  Text,
-  Animated,
-  Platform,
-  Dimensions,
-  StyleSheet,
-} from 'react-native';
-import Button from './Button';
-
-const {
-  width: DEVICE_WIDTH,
-  height: DEVIC_HEIGHT,
-} = Dimensions.get('window');
+import React from 'react';
+import { Text, Animated, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
