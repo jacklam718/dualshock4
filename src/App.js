@@ -64,7 +64,7 @@ const products = [
   {
     goodsImage: require('../assets/blue.png'),
     imageTitle1: require('../assets/title_wave.png'),
-    imageTitle2: require('../assets/title_red.png'),
+    imageTitle2: require('../assets/title_blue.png'),
     color: '#527AD3',
     title: 'WAWE BLUE',
     name: 'DUALSHOCK 4',
