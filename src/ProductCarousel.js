@@ -64,7 +64,7 @@ export default class ProductCarousel extends Component {
               },
             ],
             {
-              useNativeDriver: false,
+              useNativeDriver: true,
             }
           )}
         >

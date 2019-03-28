@@ -10,8 +10,14 @@ const styles = StyleSheet.create({
   },
   dot: {
     borderRadius: 10 / 2,
-    margin: 6,
+    marginLeft: 8,
+    marginRight: 8,
+  },
+  dotInner: {
+    borderRadius: 10 / 2,
     backgroundColor: '#fff',
+    width: 1,
+    height: 1,
   }
 });
 
@@ -33,9 +39,15 @@ export default function Indicator({ scrollX, count, style }) {
         style={StyleSheet.flatten([
           styles.dot,
           { opacity },
-          { width: size, height: size },
+          {
+            transform: [{
+              scale: size,
+            }]
+          }
         ])}
-      />
+      >
+        <View style={styles.dotInner} />
+      </Animated.View>
     ));
   }
   return (
