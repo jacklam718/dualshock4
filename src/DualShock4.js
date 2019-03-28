@@ -57,7 +57,6 @@ export default class DualShock4 extends PureComponent {
     y: 0,
   });
 
-  imageRotate = new Animated.Value(0);
   imageTranslateY = new Animated.Value(0);
   imageScale = new Animated.Value(0);
   footerImageScale = new Animated.Value(0);
@@ -86,12 +85,12 @@ export default class DualShock4 extends PureComponent {
         Animated.parallel([
           Animated.timing(this.cardSize.x, {
             toValue: this.state.width,
-            duration: 200,
+            duration: 300,
             useNativeDriver: false,
           }),
           Animated.timing(this.cardSize.y, {
             toValue: this.state.height,
-            duration: 200,
+            duration: 300,
             useNativeDriver: false,
           }),
           Animated.spring(this.activeTitleTranslateX, {
@@ -102,11 +101,6 @@ export default class DualShock4 extends PureComponent {
           }),
           Animated.spring(this.imageTranslateY, {
             toValue: 0,
-            useNativeDriver: true,
-          }),
-          Animated.timing(this.imageRotate, {
-            toValue: 0,
-            duration: 200,
             useNativeDriver: true,
           }),
           Animated.spring(this.footerImageScale, {
@@ -134,12 +128,12 @@ export default class DualShock4 extends PureComponent {
         Animated.parallel([
           Animated.timing(this.cardSize.x, {
             toValue: deviceWidth,
-            duration: 200,
+            duration: 300,
             useNativeDriver: false,
           }),
           Animated.timing(this.cardSize.y, {
             toValue: deviceHeight,
-            duration: 200,
+            duration: 300,
             useNativeDriver: false,
           }),
           Animated.spring(this.activeTitleTranslateX, {
@@ -152,17 +146,6 @@ export default class DualShock4 extends PureComponent {
             toValue: deviceHeight/2,
             useNativeDriver: true,
           }),
-          Animated.timing(this.imageRotate, {
-            toValue: 1,
-            duration: 200,
-            useNativeDriver: true,
-          }),
-          Animated.spring(this.footerImageScale, {
-            toValue: 1,
-            friction: 5.5,
-            tension: 10,
-            useNativeDriver: true,
-          }),
           Animated.timing(this.activeTextOpacity, {
             toValue: 1,
             duration: 200,
@@ -172,6 +155,15 @@ export default class DualShock4 extends PureComponent {
           Animated.timing(this.previewTextOpacity, {
             toValue: 0,
             duration: 0,
+            useNativeDriver: true,
+          }),
+        ]).start();
+        Animated.sequence([
+          Animated.delay(10),
+          Animated.spring(this.footerImageScale, {
+            toValue: 1,
+            friction: 5.5,
+            tension: 10,
             useNativeDriver: true,
           }),
         ]).start();
@@ -413,11 +405,6 @@ export default class DualShock4 extends PureComponent {
                   outputRange: [0, -deviceHeight/2],
                 }),
               }, {
-                rotate: this.imageRotate.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0deg', '180deg'],
-                }),
-              }, {
                 scale: this.imageTranslateY.interpolate({
                   inputRange: [0, deviceHeight/2],
                   outputRange: [1, 1.55],
@@ -429,6 +416,14 @@ export default class DualShock4 extends PureComponent {
           <Animated.Image
             resizeMode="contain"
             source={item.goodsImage}
+            style={StyleSheet.flatten({
+              transform: [{
+                rotate: this.cardSize.y.interpolate({
+                  inputRange: [height, deviceHeight],
+                  outputRange: ['0deg', '180deg'],
+                }),
+              }]
+            })}
           />
         </Animated.View>
 
