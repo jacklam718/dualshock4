@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Image,
-  Animated,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Slider,
-} from 'react-native';
+import { View, Text, Image, Animated, StyleSheet } from 'react-native';
 import {
   HeaderTitle,
   Heading1,
@@ -37,6 +29,8 @@ export default class DualShock4 extends Component {
     onClose: () => {},
   }
 
+  viewHasAdjusted = false;
+
   cardSize = new Animated.ValueXY({
     x: 0,
     y: 0,
@@ -58,15 +52,15 @@ export default class DualShock4 extends Component {
   ];
 
   state = {
-    isActive: false,
+    isOpen: false,
     width: 0,
     height: 0,
   }
 
-  showDetails = () => {
-    if (this.state.isActive) {
+  toggleDetails = () => {
+    if (this.state.isOpen) {
       this.setState({
-        isActive: false,
+        isOpen: false,
       }, () => {
         this.props.onClose(this.props.index);
         Animated.parallel([
@@ -115,7 +109,7 @@ export default class DualShock4 extends Component {
     } else {
       this.props.onOpen(this.props.index);
       this.setState({
-        isActive: true,
+        isOpen: true,
       }, () => {
         Animated.parallel([
           Animated.timing(this.cardSize.x, {
@@ -166,7 +160,7 @@ export default class DualShock4 extends Component {
   }
 
   renderPreviewTitle() {
-    return !this.state.isActive ? (
+    return !this.state.isOpen ? (
       <Animated.View
         style={{
           opacity: this.previewTextOpacity,
@@ -186,7 +180,7 @@ export default class DualShock4 extends Component {
   }
 
   renderPreviewPrice() {
-    return !this.state.isActive ? (
+    return !this.state.isOpen ? (
       <Animated.View
         style={{
           opacity: this.previewTextOpacity,
@@ -206,7 +200,7 @@ export default class DualShock4 extends Component {
   }
 
   renderPreviewName() {
-    return !this.state.isActive ? (
+    return !this.state.isOpen ? (
       <Animated.View
         style={{
           opacity: this.previewTextOpacity,
@@ -231,13 +225,13 @@ export default class DualShock4 extends Component {
         style={{
           position: 'absolute', 
           top: 150,
-          left: 0
+          left: 0,
+          opacity: this.state.isOpen ? 1 : 0,
         }}
       >
         <Animated.View
           style={{
             marginBottom: 66,
-            opacity: this.state.isActive ? 1 : 0,
             transform: [{
               translateX: this.titleTranslateX.interpolate({
                 inputRange: [0, deviceHeight],
@@ -246,7 +240,7 @@ export default class DualShock4 extends Component {
             }],
           }}
         >
-          <Animated.Image
+          <Image
             resizeMode="contain"
             style={{ position: 'absolute' }}
             source={this.props.item.imageTitle1}
@@ -262,7 +256,7 @@ export default class DualShock4 extends Component {
             }],
           }}
         >
-          <Animated.Image
+          <Image
             resizeMode="contain"
             style={{ position: 'absolute' }}
             source={this.props.item.imageTitle2}
@@ -296,7 +290,7 @@ export default class DualShock4 extends Component {
   }
 
   renderDetailPrice() {
-    return this.state.isActive ? (
+    return this.state.isOpen ? (
       <Animated.View
         style={{
           opacity: this.activeTextOpacity,
@@ -326,7 +320,7 @@ export default class DualShock4 extends Component {
         style={{
           position: 'absolute',
           bottom: 0,
-          opacity: this.state.isActive ? 1 : 0,
+          opacity: this.state.isOpen ? 1 : 0,
           transform: [{
             scale: this.footerImageScale.interpolate({
               inputRange: [0, 1],
@@ -349,8 +343,7 @@ export default class DualShock4 extends Component {
   }
 
   adjustContentSize = (e) => {
-    const isAdjusted = !!(this.state.width && this.state.height);
-    if (isAdjusted) {
+    if (this.viewHasAdjusted) {
       return;
     }
     const { width, height } = e.nativeEvent.layout;
@@ -363,23 +356,21 @@ export default class DualShock4 extends Component {
         y: height,
       });
     });
+    this.viewHasAdjusted = true;
   }
 
   render() {
     const { scrollX, index, item } = this.props;
     const { width, height } = this.state;
-    const cardSize = !(width && height)
-      ? null
-      : {
-          width: this.cardSize.x,
-          height: this.cardSize.y,
-        };
-    
+    const cardStyle = this.viewHasAdjusted
+      ? { width: this.cardSize.x, height: this.cardSize.y }
+      : null;
+
     return (
       <Card
         onLayout={this.adjustContentSize}
         style={StyleSheet.flatten([
-          cardSize,
+          cardStyle,
           {
             borderRadius: this.cardSize.y.interpolate({
               inputRange: [height, deviceHeight],
@@ -446,7 +437,7 @@ export default class DualShock4 extends Component {
         >
           <Button
             text="BUY"
-            onPress={this.showDetails}
+            onPress={this.toggleDetails}
           />
         </Animated.View>
         
