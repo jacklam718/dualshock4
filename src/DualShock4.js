@@ -96,7 +96,7 @@ export default class DualShock4 extends Component {
           Animated.timing(this.activeTextOpacity, {
             toValue: 0,
             duration: 0,
-            useNativeDriver: false,
+            useNativeDriver: true,
           }),
           Animated.timing(this.previewTextOpacity, {
             toValue: 1,
@@ -147,7 +147,7 @@ export default class DualShock4 extends Component {
             toValue: 1,
             duration: 200,
             delay: 300,
-            useNativeDriver: false,
+            useNativeDriver: true,
           }),
           Animated.timing(this.previewTextOpacity, {
             toValue: 0,
@@ -294,17 +294,8 @@ export default class DualShock4 extends Component {
       <Animated.View
         style={{
           opacity: this.activeTextOpacity,
-          transform: [{
-            translateX: this.cardSize.y.interpolate({
-              inputRange: [this.state.height, deviceHeight],
-              outputRange: [0, 100],
-            }),
-          }, {
-            translateY: this.cardSize.y.interpolate({
-              inputRange: [this.state.height, deviceHeight],
-              outputRange: [0, 60],
-            }),
-          }],
+          top: 60,
+          left: 100,
         }}
       >
         <Heading2>
