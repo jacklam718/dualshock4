@@ -413,8 +413,8 @@ export default class DualShock4 extends Component {
         <Animated.View
           style={{
             transform: [{
-              translateX: this.cardSize.y.interpolate({
-                inputRange: [height, deviceHeight],
+              translateX: this.cardSize.x.interpolate({
+                inputRange: [width, deviceWidth],
                 outputRange: [0, -60],
               }),
             }, {

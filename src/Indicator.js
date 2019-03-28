@@ -21,7 +21,7 @@ export default function Indicator({ progress, count, style }) {
     const inputRange = [deviceWidth * (i-1), deviceWidth * i, deviceWidth * (i+1)];
     const size = progress.interpolate({
       inputRange,
-      outputRange: [6, 10, 6],
+      outputRange: [5, 10, 5],
     });
     const opacity = progress.interpolate({
       inputRange,
