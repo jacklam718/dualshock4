@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -18,14 +18,17 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function Button({ text, onPress }) {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.button}>
-        <Text style={styles.text}>
-          {text}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  )
+export default class Card extends PureComponent {
+  render() {
+    const { text, onPress } = this.props;
+    return (
+      <TouchableOpacity onPress={onPress}>
+        <View style={StyleSheet.flatten(styles.button)}>
+          <Text style={StyleSheet.flatten(styles.text)}>
+            {text}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    ) 
+  }
 }

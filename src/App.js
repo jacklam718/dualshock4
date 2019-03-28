@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
   Image,
   Animated,
@@ -45,15 +45,19 @@ const products = [
   },
 ]
 
-export default class App extends React.Component {
+export default class App extends PureComponent {
   scrollX = new Animated.Value(0);
+
   state = {
     isOpen: false,
   }
 
+  onOpen = () => this.setState({ isOpen: true })
+  onClose = () => this.setState({ isOpen: false })
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={StyleSheet.flatten(styles.container)}>
         <StatusBar
           backgroundColor="black"
           barStyle="light-content"
@@ -64,17 +68,12 @@ export default class App extends React.Component {
           scrollEnabled={!this.state.isOpen}
           renderItem={({ item, index, scrollX }) => (
             <DualShock4
-              pointerEvents={'auto'}
               key={`page-${index}`}
               scrollX={scrollX}
               index={index}
               item={item}
-              onOpen={() => {
-                this.setState({ isOpen: true });
-              }}
-              onClose={() => {
-                this.setState({ isOpen: false });
-              }}
+              onOpen={this.onOpen}
+              onClose={this.onClose}
             />
           )}
         />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { Text, Animated, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -19,17 +19,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Card({ style, children, ...props }) {
-  return (
-    <Animated.View
-      {...props}
-      style={[
-        styles.container,
-        style,
-      ]}
-    >
-      {children}
-    </Animated.View>
-  );
+export default class Card extends PureComponent {
+  render() {
+    const { style, children, ...restProps } = this.props;
+    return (
+      <Animated.View
+        {...restProps}
+        style={StyleSheet.flatten([
+          styles.container,
+          style,
+        ])}
+      >
+        {children}
+      </Animated.View>
+    ); 
+  } 
 }
-

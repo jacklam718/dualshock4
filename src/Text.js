@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { Text, StyleSheet } from 'react-native';
 
-const styles = {
+const styles = StyleSheet.create({
   fontStyle: {
     fontFamily: 'Helvetica',
     fontWeight: '400',
@@ -47,11 +46,11 @@ const styles = {
     lineHeight: 17,
     lineHeight: 24,
   },
-}
+});
 
 export function Heading1({ style, ...props }) {
   return (
-    <Animated.Text 
+    <Text 
       style={StyleSheet.flatten([styles.h1, style])}
       {...props}
     />
@@ -60,7 +59,7 @@ export function Heading1({ style, ...props }) {
 
 export function Heading2({ style, ...props }) {
   return (
-    <Animated.Text 
+    <Text 
       style={StyleSheet.flatten([styles.h2, style])}
       {...props}
     />
@@ -69,7 +68,7 @@ export function Heading2({ style, ...props }) {
 
 export function Heading3({ style, ...props }) {
   return (
-    <Animated.Text 
+    <Text 
       style={StyleSheet.flatten([styles.h3, style])}
       {...props}
     />
@@ -78,7 +77,7 @@ export function Heading3({ style, ...props }) {
 
 export function Heading4({ style, ...props }) {
   return (
-    <Animated.Text 
+    <Text 
       style={StyleSheet.flatten([styles.h4, style])}
       {...props}
     />
@@ -87,7 +86,7 @@ export function Heading4({ style, ...props }) {
 
 export function Heading5({ style, ...props }) {
   return (
-    <Animated.Text 
+    <Text 
       style={StyleSheet.flatten([styles.h5, style])}
       {...props}
     />
@@ -96,7 +95,7 @@ export function Heading5({ style, ...props }) {
 
 export function HeaderTitle({ style, ...props }) {
   return (
-    <Animated.Text 
+    <Text 
       style={StyleSheet.flatten([styles.headerTitle, style])}
       {...props}
     />
@@ -105,7 +104,7 @@ export function HeaderTitle({ style, ...props }) {
 
 export function Paragraph({ style, ...props }) {
   return (
-    <Animated.Text 
+    <Text 
       style={StyleSheet.flatten([styles.p, style])}
       {...props}
     />

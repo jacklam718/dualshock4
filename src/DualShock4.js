@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, Image, Animated, StyleSheet } from 'react-native';
 import {
   HeaderTitle,
@@ -21,9 +21,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'transparent',
   },
+  image: {
+    position: 'absolute',
+  },
+  detailTitle: {
+    position: 'absolute', 
+    top: 150,
+    left: 0,
+  },
+  detailPrice: {
+    top: 60,
+    left: 100,
+  },
+  detailDecription: {
+    position: 'absolute',
+    padding: 20,
+    top: 140 + 160,
+  },
+  detailFooterImage: {
+    position: 'absolute',
+    bottom: 0,
+  },
 });
 
-export default class DualShock4 extends Component {
+export default class DualShock4 extends PureComponent {
   static defaultProps = {
     onOpen: () => {},
     onClose: () => {},
@@ -161,15 +182,17 @@ export default class DualShock4 extends Component {
   renderPreviewTitle() {
     return !this.state.isOpen ? (
       <Animated.View
-        style={{
-          opacity: this.previewTextOpacity,
-          transform: [{
-            translateX: this.props.scrollX.interpolate({
-              inputRange: this.inputRange,
-              outputRange: [0, -deviceWidth * 0.1],
-            }),
-          }],
-        }}
+        style={StyleSheet.flatten([
+          { opacity: this.previewTextOpacity },
+          {
+            transform: [{
+              translateX: this.props.scrollX.interpolate({
+                inputRange: this.inputRange,
+                outputRange: [0, -deviceWidth * 0.1],
+              }),
+            }],
+          }
+        ])}
       >
         <Heading3>
           MAGMA RED
@@ -181,15 +204,17 @@ export default class DualShock4 extends Component {
   renderPreviewPrice() {
     return !this.state.isOpen ? (
       <Animated.View
-        style={{
-          opacity: this.previewTextOpacity,
-          transform: [{
-            translateX: this.props.scrollX.interpolate({
-              inputRange: this.inputRange,
-              outputRange: [0, -deviceWidth * 0.4],
-            }),
-          }],
-        }}
+        style={StyleSheet.flatten([
+          { opacity: this.previewTextOpacity },
+          {
+            transform: [{
+              translateX: this.props.scrollX.interpolate({
+                inputRange: this.inputRange,
+                outputRange: [0, -deviceWidth * 0.4],
+              }),
+            }],
+          }
+        ])}
       >
         <Heading4>
           {this.props.item.price}
@@ -201,15 +226,17 @@ export default class DualShock4 extends Component {
   renderPreviewName() {
     return !this.state.isOpen ? (
       <Animated.View
-        style={{
-          opacity: this.previewTextOpacity,
-          transform: [{
-            translateX: this.props.scrollX.interpolate({
-              inputRange: this.inputRange,
-              outputRange: [0, -deviceWidth * 0.2],
-            }),
-          }],
-        }}
+        style={StyleSheet.flatten([
+          { opacity: this.previewTextOpacity },
+          {
+            transform: [{
+              translateX: this.props.scrollX.interpolate({
+                inputRange: this.inputRange,
+                outputRange: [0, -deviceWidth * 0.2],
+              }),
+            }],
+          }
+        ])}
       >
         <Heading5>
           {this.props.item.name}
@@ -221,43 +248,43 @@ export default class DualShock4 extends Component {
   renderDetailTitle() {
     return (
       <View
-        style={{
-          position: 'absolute', 
-          top: 150,
-          left: 0,
-          opacity: this.state.isOpen ? 1 : 0,
-        }}
+        style={StyleSheet.flatten([
+          styles.detailTitle,
+          { opacity: this.state.isOpen ? 1 : 0 },
+        ])}
       >
         <Animated.View
-          style={{
-            marginBottom: 66,
-            transform: [{
-              translateX: this.activeTitleTranslateX.interpolate({
-                inputRange: [0, deviceHeight],
-                outputRange: [-deviceWidth, 0],
-              }),
-            }],
-          }}
+          style={StyleSheet.flatten([
+            { marginBottom: 66 },
+            {
+              transform: [{
+                translateX: this.activeTitleTranslateX.interpolate({
+                  inputRange: [0, deviceHeight],
+                  outputRange: [-deviceWidth, 0],
+                }),
+              }],
+            }
+          ])}
         >
           <Image
             resizeMode="contain"
-            style={{ position: 'absolute' }}
+            style={StyleSheet.flatten(styles.image)}
             source={this.props.item.imageTitle1}
           />
         </Animated.View>
         <Animated.View
-          style={{
+          style={StyleSheet.flatten({
             transform: [{
               translateX: this.activeTitleTranslateX.interpolate({
                 inputRange: [this.state.height, deviceHeight],
                 outputRange: [-deviceWidth, 0],
               }),
             }],
-          }}
+          })}
         >
           <Image
             resizeMode="contain"
-            style={{ position: 'absolute' }}
+            style={StyleSheet.flatten(styles.image)}
             source={this.props.item.imageTitle2}
           />
         </Animated.View>
@@ -267,13 +294,11 @@ export default class DualShock4 extends Component {
 
   renderDetailDecription() {
     return (
-      <Animated.View
-        style={{
-          position: 'absolute',
-          padding: 20,
-          top: 140 + 160,
-          opacity: this.activeTextOpacity,
-        }}
+      <Animated.View 
+        style={StyleSheet.flatten([
+          styles.detailDecription,
+          { opacity: this.activeTextOpacity },
+        ])}
       >
         <Heading4>
           DualShock 4
@@ -291,11 +316,10 @@ export default class DualShock4 extends Component {
   renderDetailPrice() {
     return this.state.isOpen ? (
       <Animated.View
-        style={{
-          opacity: this.activeTextOpacity,
-          top: 60,
-          left: 100,
-        }}
+        style={StyleSheet.flatten([
+          styles.detailPrice,
+          { opacity: this.activeTextOpacity, }
+        ])}
       >
         <Heading2>
           {this.props.item.price}
@@ -307,22 +331,23 @@ export default class DualShock4 extends Component {
   renderDetailFooterImage() {
     return (
       <Animated.View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          opacity: this.state.isOpen ? 1 : 0,
-          transform: [{
-            scale: this.footerImageScale.interpolate({
-              inputRange: [0, 1],
-              outputRange: [3, 1],
-            })
-          }, {
-            translateY: this.footerImageScale.interpolate({
-              inputRange: [0, 1],
-              outputRange: [200, 0],
-            }),
-          }]
-        }}
+        style={StyleSheet.flatten([
+          styles.detailFooterImage,
+          { opacity: this.state.isOpen ? 1 : 0 },
+          {
+            transform: [{
+              scale: this.footerImageScale.interpolate({
+                inputRange: [0, 1],
+                outputRange: [3, 1],
+              })
+            }, {
+              translateY: this.footerImageScale.interpolate({
+                inputRange: [0, 1],
+                outputRange: [200, 0],
+              }),
+            }]
+          }
+        ])}
       > 
         <Animated.Image
           resizeMode="contain"
@@ -411,7 +436,7 @@ export default class DualShock4 extends Component {
         {this.renderDetailDecription()}
         
         <Animated.View
-          style={{
+          style={StyleSheet.flatten({
             transform: [{
               translateX: this.cardSize.x.interpolate({
                 inputRange: [width, deviceWidth],
@@ -423,7 +448,7 @@ export default class DualShock4 extends Component {
                 outputRange: [0, 100],
               }),
             }],
-          }}
+          })}
         >
           <Button
             text="BUY"

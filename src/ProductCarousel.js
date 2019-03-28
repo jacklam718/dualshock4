@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, ScrollView, StyleSheet, Animated, Dimensions, Platform } from 'react-native'; 
 import { isIphoneX, deviceWidth } from './env';
 import GradientBackgrounds from './GradientBackgrounds';
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class ProductCarousel extends Component {
+export default class ProductCarousel extends PureComponent {
   scrollX = new Animated.Value(0);
   progress = new Animated.Value(0);
 
@@ -32,26 +32,29 @@ export default class ProductCarousel extends Component {
   }
 
   renderCards() {
-    return this.props.products.map((item, index) => {
+    const { products, renderItem } = this.props;
+    return products.map((item, index) => {
       return (
         <View key={`page-${index}`} style={styles.page}>
-          {this.props.renderItem({ item, index, scrollX: this.scrollX })}
+          {renderItem({ item, index, scrollX: this.scrollX })}
         </View>
       );
     });
   }
 
   render() {
+    const { scrollEnabled, products } = this.props;
+
     return (
-      <View style={styles.container}>
+      <View style={StyleSheet.flatten(styles.container)}>
         <GradientBackgrounds
           scrollX={this.scrollX}
-          colors={this.props.products.map(i => i.color)}
+          colors={products.map(i => i.color)}
         />
 
-        <View style={styles.indicator}>
+        <View style={StyleSheet.flatten(styles.indicator)}>
           <Indicator
-            count={this.props.products.length}
+            count={products.length}
             progress={this.progress}
           />
         </View>
@@ -65,7 +68,7 @@ export default class ProductCarousel extends Component {
           decelerationRate="fast"
           scrollEventThrottle={1}
           onLayout={this.onLayout}
-          scrollEnabled={this.props.scrollEnabled}
+          scrollEnabled={scrollEnabled}
           onScroll={Animated.event(
             [
               {
