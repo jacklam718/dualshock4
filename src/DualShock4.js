@@ -50,7 +50,7 @@ export default class DualShock4 extends PureComponent {
     onClose: () => {},
   }
 
-  viewHasAdjusted = false;
+  viewSizeHasAdjusted = false;
 
   cardSize = new Animated.ValueXY({
     x: 0,
@@ -350,7 +350,7 @@ export default class DualShock4 extends PureComponent {
   }
 
   adjustContentSize = (e) => {
-    if (this.viewHasAdjusted) {
+    if (this.viewSizeHasAdjusted) {
       return;
     }
     const { width, height } = e.nativeEvent.layout;
@@ -363,13 +363,13 @@ export default class DualShock4 extends PureComponent {
         y: height,
       });
     });
-    this.viewHasAdjusted = true;
+    this.viewSizeHasAdjusted = true;
   }
 
   render() {
     const { scrollX, index, item } = this.props;
     const { width, height } = this.state;
-    const cardStyle = this.viewHasAdjusted
+    const cardStyle = this.viewSizeHasAdjusted
       ? { width: this.cardSize.x, height: this.cardSize.y }
       : null;
 
