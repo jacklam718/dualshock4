@@ -36,15 +36,14 @@ export default class DualShock4 extends Component {
     y: 0,
   });
 
-  titleTranslateX = new Animated.Value(0);
   imageRotate = new Animated.Value(0);
   imageTranslateY = new Animated.Value(0);
   imageScale = new Animated.Value(0);
   footerImageScale = new Animated.Value(0);
-  paragraphOpacity = new Animated.Value(0);
 
   previewTextOpacity = new Animated.Value(1);
   activeTextOpacity = new Animated.Value(0);
+  activeTitleTranslateX = new Animated.Value(0);
 
   inputRange = [
     deviceWidth * this.props.index,
@@ -74,7 +73,7 @@ export default class DualShock4 extends Component {
             duration: 200,
             useNativeDriver: false,
           }),
-          Animated.spring(this.titleTranslateX, {
+          Animated.spring(this.activeTitleTranslateX, {
             toValue: 0,
             friction: 4.5,
             tension: 0.5,
@@ -122,7 +121,7 @@ export default class DualShock4 extends Component {
             duration: 200,
             useNativeDriver: false,
           }),
-          Animated.spring(this.titleTranslateX, {
+          Animated.spring(this.activeTitleTranslateX, {
             toValue: deviceHeight,
             friction: 4.5,
             tension: 0.5,
@@ -233,7 +232,7 @@ export default class DualShock4 extends Component {
           style={{
             marginBottom: 66,
             transform: [{
-              translateX: this.titleTranslateX.interpolate({
+              translateX: this.activeTitleTranslateX.interpolate({
                 inputRange: [0, deviceHeight],
                 outputRange: [-deviceWidth, 0],
               }),
@@ -249,7 +248,7 @@ export default class DualShock4 extends Component {
         <Animated.View
           style={{
             transform: [{
-              translateX: this.titleTranslateX.interpolate({
+              translateX: this.activeTitleTranslateX.interpolate({
                 inputRange: [this.state.height, deviceHeight],
                 outputRange: [-deviceWidth, 0],
               }),
