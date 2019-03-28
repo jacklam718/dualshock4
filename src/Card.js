@@ -20,8 +20,8 @@ const {
 const styles = StyleSheet.create({
   container: {
     borderRadius: 15,
-    width: DEVICE_WIDTH * 0.85,
-    height: DEVIC_HEIGHT * 0.65,
+    paddingTop: 40,
+    paddingBottom: 40,
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
@@ -35,9 +35,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Card({ style, children }) {
+export default function Card({ style, children, ...props }) {
   return (
     <Animated.View
+      {...props}
       style={[
         styles.container,
         style,

@@ -35,11 +35,9 @@ const CARD_WIDTH = DEVICE_WIDTH * 0.85;
 const CARD_HEIGHT = DEVIC_HEIGHT * 0.65;
 
 const styles = StyleSheet.create({
-  page: {
-    width: DEVICE_WIDTH,
-    alignItems: 'center',
+  content: {
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    alignItems: 'center',
   },
   imageContainer: {
     alignItems: 'center',
@@ -77,6 +75,8 @@ export default class DualShock4 extends Component {
 
   state = {
     isActive: false,
+    width: 0,
+    height: 0,
   }
 
   showDetails = () => {
@@ -87,12 +87,12 @@ export default class DualShock4 extends Component {
         this.props.onClose(this.props.index);
         Animated.parallel([
           Animated.timing(this.cardSize.x, {
-            toValue: CARD_WIDTH,
+            toValue: this.state.width,
             duration: 200,
             useNativeDriver: false,
           }),
           Animated.timing(this.cardSize.y, {
-            toValue: CARD_HEIGHT,
+            toValue: this.state.height,
             duration: 200,
             useNativeDriver: false,
           }),
@@ -182,11 +182,11 @@ export default class DualShock4 extends Component {
   }
 
   renderPreviewTitle() {
-    return (
+    return !this.state.isActive ? (
       <Animated.View
         style={{
-          top: 50,
-          position: 'absolute',
+          // top: 50,
+          // position: 'absolute',
           opacity: this.previewTextOpacity,
           transform: [{
             translateX: this.props.scrollX.interpolate({
@@ -200,15 +200,15 @@ export default class DualShock4 extends Component {
           MAGMA RED
         </Heading3>
       </Animated.View>
-    );
+    ) : null;
   }
 
   renderPreviewPrice() {
-    return (
+    return !this.state.isActive ? (
       <Animated.View
         style={{
-          top: 90,
-          position: 'absolute',
+          // top: 90,
+          // position: 'absolute',
           opacity: this.previewTextOpacity,
           // height: 40,
           transform: [{
@@ -223,7 +223,27 @@ export default class DualShock4 extends Component {
           {this.props.item.price}
         </Heading4>
       </Animated.View>
-    );
+    ) : null;
+  }
+
+  renderPreviewName() {
+    return !this.state.isActive ? (
+      <Animated.View
+        style={{
+          opacity: this.previewTextOpacity,
+          transform: [{
+            translateX: this.props.scrollX.interpolate({
+              inputRange: this.inputRange,
+              outputRange: [0, -DEVICE_WIDTH * 0.2],
+            }),
+          }],
+        }}
+      >
+        <Heading5>
+          {this.props.item.name}
+        </Heading5>
+      </Animated.View>
+    ) : null
   }
 
   renderDetailTitle() {
@@ -231,7 +251,7 @@ export default class DualShock4 extends Component {
       <View
         style={{
           position: 'absolute', 
-          top: 160,
+          top: 150,
           left: 0
         }}
       >
@@ -257,7 +277,7 @@ export default class DualShock4 extends Component {
           style={{
             transform: [{
               translateX: this.titleTranslateX.interpolate({
-                inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
+                inputRange: [this.state.height, DEVIC_HEIGHT],
                 outputRange: [-400, 0],
               }),
             }],
@@ -267,7 +287,6 @@ export default class DualShock4 extends Component {
             resizeMode="contain"
             style={{ position: 'absolute' }}
             source={this.props.item.imageTitle2}
-
           />
         </Animated.View>
       </View>
@@ -304,12 +323,12 @@ export default class DualShock4 extends Component {
           opacity: this.activeTextOpacity,
           transform: [{
             translateX: this.cardSize.y.interpolate({
-              inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
+              inputRange: [this.state.height, DEVIC_HEIGHT],
               outputRange: [0, 100],
             }),
           }, {
             translateY: this.cardSize.y.interpolate({
-              inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
+              inputRange: [this.state.height, DEVIC_HEIGHT],
               outputRange: [0, 60],
             }),
           }],
@@ -350,118 +369,124 @@ export default class DualShock4 extends Component {
     )
   }
 
+  adjustContentSize = (e) => {
+    const isAdjusted = !!(this.state.width && this.state.height);
+    if (isAdjusted) {
+      return;
+    }
+    const { width, height } = e.nativeEvent.layout;
+    this.setState({
+      width,
+      height,
+    }, () => {
+      this.cardSize.setValue({
+        x: width,
+        y: height,
+      });
+    });
+  }
+
   render() {
     const { scrollX, index, item } = this.props;
-
+    const { width, height } = this.state;
+    const cardSize = !(width && height)
+      ? null
+      : {
+          width: this.cardSize.x,
+          height: this.cardSize.y,
+        };
+    
     return (
-      <View style={styles.page}>
-        <Card
+      <Card
+        onLayout={this.adjustContentSize}
+        style={StyleSheet.flatten([
+          cardSize,
+          {
+            borderRadius: this.cardSize.y.interpolate({
+              inputRange: [height, DEVIC_HEIGHT],
+              outputRange: [15, 0],
+            }),
+          },
+        ])}
+      >
+        {this.renderPreviewTitle()}
+        {this.renderPreviewPrice()}
+        <Animated.View
+          shouldRasterizeIOS
+          renderToHardwareTextureAndroid
           style={StyleSheet.flatten([
+            styles.imageContainer,
+            // { marginTop: DEVIC_HEIGHT * 0.08 },
+            { marginTop: this.state.isActive ? 50 : 50 },
             {
-              width: this.cardSize.x,
-              height: this.cardSize.y,
-            },
-            {
-              borderRadius: this.cardSize.y.interpolate({
-                inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
-                outputRange: [15, 0],
-              }),
-            },
-          ])}
-        >
-          {this.renderPreviewTitle()}
-          {this.renderPreviewPrice()}
-          <Animated.View
-            shouldRasterizeIOS
-            renderToHardwareTextureAndroid
-            style={StyleSheet.flatten([
-              styles.imageContainer,
-              // { marginTop: DEVIC_HEIGHT * 0.08 },
-              { marginTop: this.state.isActive ? 100 : 50 },
-              {
-                transform: [{
-                  translateX: scrollX.interpolate({
-                    inputRange: this.inputRange,
-                    outputRange: [0, -DEVICE_WIDTH * 0.5],
-                  }),
-                }, {
-                  translateY: this.imageTranslateY.interpolate({
-                    inputRange: [
-                      0,
-                      DEVIC_HEIGHT/2,
-                    ],
-                    outputRange: [0, -DEVIC_HEIGHT/2],
-                  }),
-                }, {
-                  rotate: this.imageRotate.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['0deg', '180deg'],
-                  }),
-                }, {
-                  scaleX: this.imageTranslateY.interpolate({
-                    inputRange: [0, DEVIC_HEIGHT/2],
-                    outputRange: [1, 1.55],
-                  }),
-                }, {
-                  scaleY: this.imageTranslateY.interpolate({
-                    inputRange: [0, DEVIC_HEIGHT/2],
-                    outputRange: [1, 1.55],
-                  }),
-                }],
-              },
-            ])}
-          >
-            <Animated.Image
-              resizeMode="contain"
-              source={item.goodsImage}
-            />
-          </Animated.View>
-
-          {this.renderDetailTitle()}
-          {this.renderDetailDecription()}
-          
-          <Animated.View
-            style={{
-              transform: [{
-                translateX: this.cardSize.y.interpolate({
-                  inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
-                  outputRange: [0, -60],
-                }),
-              }, {
-                translateY: this.cardSize.y.interpolate({
-                  inputRange: [CARD_HEIGHT, DEVIC_HEIGHT],
-                  outputRange: [0, 100],
-                }),
-              }],
-            }}
-          >
-            <Button
-              text="BUY"
-              onPress={this.showDetails}
-            />
-          </Animated.View>
-          
-          {this.renderDetailPrice()}
-
-          <Animated.View
-            style={{
-              opacity: this.previewTextOpacity,
               transform: [{
                 translateX: scrollX.interpolate({
                   inputRange: this.inputRange,
-                  outputRange: [0, -DEVICE_WIDTH * 0.2],
+                  outputRange: [0, -DEVICE_WIDTH * 0.5],
+                }),
+              }, {
+                translateY: this.imageTranslateY.interpolate({
+                  inputRange: [
+                    0,
+                    DEVIC_HEIGHT/2,
+                  ],
+                  outputRange: [0, -DEVIC_HEIGHT/2],
+                }),
+              }, {
+                rotate: this.imageRotate.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0deg', '180deg'],
+                }),
+              }, {
+                scaleX: this.imageTranslateY.interpolate({
+                  inputRange: [0, DEVIC_HEIGHT/2],
+                  outputRange: [1, 1.55],
+                }),
+              }, {
+                scaleY: this.imageTranslateY.interpolate({
+                  inputRange: [0, DEVIC_HEIGHT/2],
+                  outputRange: [1, 1.55],
                 }),
               }],
-            }}
-          >
-            <Heading5>
-              {item.name}
-            </Heading5>
-          </Animated.View>
+            },
+          ])}
+        >
+          <Animated.Image
+            resizeMode="contain"
+            source={item.goodsImage}
+          />
+        </Animated.View>
 
-          {this.renderDetailFooterImage()}
-        </Card>
-      </View>
+        {this.renderDetailTitle()}
+        {this.renderDetailDecription()}
+        
+        <Animated.View
+          style={{
+            transform: [{
+              translateX: this.cardSize.y.interpolate({
+                inputRange: [height, DEVIC_HEIGHT],
+                outputRange: [0, -60],
+              }),
+            }, {
+              translateY: this.cardSize.y.interpolate({
+                inputRange: [height, DEVIC_HEIGHT],
+                outputRange: [0, 100],
+              }),
+            }],
+          }}
+        >
+          <Button
+            text="BUY"
+            onPress={this.showDetails}
+          />
+        </Animated.View>
+        
+        {this.renderDetailPrice()}
+
+        {this.renderPreviewName()}
+
+        {this.renderDetailFooterImage()}
+      </Card>
     );
   }
 }

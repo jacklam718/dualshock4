@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Animated, Dimensions } from 'react-native'; 
+import { View, ScrollView, StyleSheet, Animated, Dimensions, Platform } from 'react-native'; 
 import GradientBackgrounds from './GradientBackgrounds';
 import Indicator from './Indicator';
 
@@ -8,13 +8,21 @@ const {
   height: deviceHeight,
 } = Dimensions.get('window');
 
+const isIphoneX = Platform.OS === 'ios' && (deviceHeight === 812 || deviceWidth === 812);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  page: {
+    width: deviceWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
   indicator: {
     position: "absolute",
-    bottom: 70,
+    bottom: isIphoneX ? 70 : 30,
     left: 0,
     right: 0,
     alignItems: 'center',
@@ -26,7 +34,11 @@ export default class ProductCarousel extends Component {
 
   renderCards() {
     return this.props.products.map((item, index) => {
-      return this.props.renderItem({ item, index, scrollX: this.scrollX });
+      return (
+        <View key={`page-${index}`} style={styles.page}>
+          {this.props.renderItem({ item, index, scrollX: this.scrollX })}
+        </View>
+      );
     });
   }
 
