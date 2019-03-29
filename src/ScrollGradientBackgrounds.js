@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Animated, StyleSheet } from 'react-native';
 import { deviceWidth, deviceHeight, isIOS } from './env';
 
-export default class GradientBackgrounds extends PureComponent {
+export default class ScrollGradientBackgrounds extends PureComponent {
   static propTypes = {
     scrollX: PropTypes.object.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,

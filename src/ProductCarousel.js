@@ -1,7 +1,14 @@
 import React, { PureComponent } from 'react';
-import { View, ScrollView, StyleSheet, Animated, Dimensions, Platform } from 'react-native'; 
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Animated,
+  Dimensions,
+  Platform,
+} from 'react-native';
 import { isIphoneX, deviceWidth } from './env';
-import GradientBackgrounds from './GradientBackgrounds';
+import ScrollGradientBackgrounds from './ScrollGradientBackgrounds';
 import Indicator from './Indicator';
 
 const styles = StyleSheet.create({
@@ -47,7 +54,7 @@ export default class ProductCarousel extends PureComponent {
 
     return (
       <View style={StyleSheet.flatten(styles.container)}>
-        <GradientBackgrounds
+        <ScrollGradientBackgrounds
           scrollX={this.scrollX}
           colors={products.map(i => i.color)}
         />
