@@ -159,7 +159,7 @@ export default class DualShock4 extends PureComponent {
           }),
         ]).start();
         Animated.sequence([
-          Animated.delay(10),
+          Animated.delay(50),
           Animated.spring(this.footerImageScale, {
             toValue: 1,
             friction: 5.5,
