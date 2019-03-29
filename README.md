@@ -5,6 +5,7 @@ https://dribbble.com/shots/2615748-Dualshock4-Sketch-Principle-Freebie?fbclid=Iw
 
 Preview: <br>
 <img src=".github/dualshock4.gif">
+<img src=".github/dualshock4-android.gif">
 
 ## Setup
 * `yarn`
