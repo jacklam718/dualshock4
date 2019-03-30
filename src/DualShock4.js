@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'transparent',
   },
-  image: {
+  titleImage: {
     position: 'absolute',
   },
   detailTitle: {
@@ -52,11 +52,7 @@ export default class DualShock4 extends PureComponent {
 
   viewSizeHasAdjusted = false;
 
-  cardSize = new Animated.ValueXY({
-    x: 0,
-    y: 0,
-  });
-
+  cardSize = new Animated.ValueXY({ x: 0, y: 0 });
   imageRotate = new Animated.Value(0);
   imageTranslateY = new Animated.Value(0);
   imageScale = new Animated.Value(0);
@@ -65,11 +61,6 @@ export default class DualShock4 extends PureComponent {
   previewTextOpacity = new Animated.Value(1);
   activeTextOpacity = new Animated.Value(0);
   activeTitleTranslateX = new Animated.Value(0);
-
-  inputRange = [
-    deviceWidth * this.props.index,
-    deviceWidth * (this.props.index + 1),
-  ];
 
   state = {
     isOpen: false,
@@ -187,7 +178,7 @@ export default class DualShock4 extends PureComponent {
           {
             transform: [{
               translateX: this.props.scrollX.interpolate({
-                inputRange: this.inputRange,
+                inputRange: [deviceWidth * this.props.index, deviceWidth * (this.props.index + 1)],
                 outputRange: [0, -deviceWidth * 0.1],
               }),
             }],
@@ -209,7 +200,7 @@ export default class DualShock4 extends PureComponent {
           {
             transform: [{
               translateX: this.props.scrollX.interpolate({
-                inputRange: this.inputRange,
+                inputRange: [deviceWidth * this.props.index, deviceWidth * (this.props.index + 1)],
                 outputRange: [0, -deviceWidth * 0.4],
               }),
             }],
@@ -231,7 +222,7 @@ export default class DualShock4 extends PureComponent {
           {
             transform: [{
               translateX: this.props.scrollX.interpolate({
-                inputRange: this.inputRange,
+                inputRange: [deviceWidth * this.props.index, deviceWidth * (this.props.index + 1)],
                 outputRange: [0, -deviceWidth * 0.2],
               }),
             }],
@@ -268,7 +259,7 @@ export default class DualShock4 extends PureComponent {
         >
           <Image
             resizeMode="contain"
-            style={StyleSheet.flatten(styles.image)}
+            style={StyleSheet.flatten(styles.titleImage)}
             source={this.props.item.imageTitle1}
           />
         </Animated.View>
@@ -284,7 +275,7 @@ export default class DualShock4 extends PureComponent {
         >
           <Image
             resizeMode="contain"
-            style={StyleSheet.flatten(styles.image)}
+            style={StyleSheet.flatten(styles.titleImage)}
             source={this.props.item.imageTitle2}
           />
         </Animated.View>
@@ -348,7 +339,7 @@ export default class DualShock4 extends PureComponent {
             }]
           }
         ])}
-      > 
+      >
         <Animated.Image
           resizeMode="contain"
           source={require('../assets/photos.png')}
@@ -358,20 +349,14 @@ export default class DualShock4 extends PureComponent {
   }
 
   adjustContentSize = (e) => {
-    if (this.viewSizeHasAdjusted) {
-      return;
-    }
-    const { width, height } = e.nativeEvent.layout;
-    this.setState({
-      width,
-      height,
-    }, () => {
-      this.cardSize.setValue({
-        x: width,
-        y: height,
+    // only adjuste once
+    if (!this.viewSizeHasAdjusted) {
+      const { width, height } = e.nativeEvent.layout;
+      this.setState({ width, height }, () => {
+        this.cardSize.setValue({ x: width, y: height });
       });
-    });
-    this.viewSizeHasAdjusted = true;
+      this.viewSizeHasAdjusted = true;
+    }
   }
 
   render() {
@@ -404,7 +389,7 @@ export default class DualShock4 extends PureComponent {
             {
               transform: [{
                 translateX: scrollX.interpolate({
-                  inputRange: this.inputRange,
+                  inputRange: [deviceWidth * this.props.index, deviceWidth * (this.props.index + 1)],
                   outputRange: [0, -deviceWidth * 0.5],
                 }),
               }, {
