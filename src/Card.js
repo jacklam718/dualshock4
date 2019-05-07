@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {

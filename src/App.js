@@ -1,17 +1,8 @@
 import React, { PureComponent } from 'react';
-import {
-  Image,
-  Animated,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity } from 'react-native';
 import { isIphoneX } from './env';
 import DualShock4 from './DualShock4';
-import ProductCarousel from './ProductCarousel';
+import GradientBackgroundsCarousel from './GradientBackgroundsCarousel';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,8 +37,6 @@ const products = [
 ]
 
 export default class App extends PureComponent {
-  scrollX = new Animated.Value(0);
-
   state = {
     isOpen: false,
   }
@@ -63,9 +52,10 @@ export default class App extends PureComponent {
           barStyle="light-content"
         />
 
-        <ProductCarousel
-          products={products}
+        <GradientBackgroundsCarousel
+          data={products}
           scrollEnabled={!this.state.isOpen}
+          backgroundColors={products.map(i => i.color)}
           renderItem={({ item, index, scrollX }) => (
             <DualShock4
               key={`page-${index}`}

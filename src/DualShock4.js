@@ -1,18 +1,16 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Image, Animated, StyleSheet } from 'react-native';
 import {
-  HeaderTitle,
   Heading1,
   Heading2,
   Heading3,
   Heading4,
   Heading5,
-  Paragraph
+  Paragraph,
 } from './Text';
 import { deviceWidth, deviceHeight } from './env';
 import Card from './Card';
 import Button from './Button';
-import Indicator from './Indicator';
 
 const styles = StyleSheet.create({
   imageContainer: {

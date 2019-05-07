@@ -15,19 +15,25 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Indicator extends PureComponent {
+export default class ScrollingIndicator extends PureComponent {
   render() {
-    const { progress, count, style } = this.props;
+    const { scrollOffset, total, style } = this.props;
     const dots = [];
-    for (let i = 0; i < count; i++) {
-      const inputRange = [deviceWidth * (i-1), deviceWidth * i, deviceWidth * (i+1)];
-      const size = progress.interpolate({
+    for (let i = 0; i < total; i++) {
+      const inputRange = [
+        deviceWidth * (i-1),
+        deviceWidth * i,
+        deviceWidth * (i+1),
+      ];
+      const size = scrollOffset.interpolate({
         inputRange,
         outputRange: [5, 10, 5],
+        extrapolate: 'clamp',
       });
-      const opacity = progress.interpolate({
+      const opacity = scrollOffset.interpolate({
         inputRange,
         outputRange: [0.5, 1, 0.5],
+        extrapolate: 'clamp',
       });
       dots.push((
         <Animated.View
@@ -37,14 +43,14 @@ export default class Indicator extends PureComponent {
             { opacity },
             { width: size, height: size },
           ])}
-        >
-          <View style={styles.dotInner} />
-        </Animated.View>
+        />
       ));
     }
     return (
-      <View style={StyleSheet.flatten([styles.container, style])}>
-        {dots}
+      <View style={style}>
+        <View style={StyleSheet.flatten(styles.container)}>
+          {dots}
+        </View>
       </View>
     )
   }

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Card extends PureComponent {
+export default class Button extends PureComponent {
   render() {
     const { text, onPress } = this.props;
     return (
