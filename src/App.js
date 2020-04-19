@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity } from 'react-native';
+import { registerRootComponent } from 'expo';
 import { isIphoneX } from './env';
 import DualShock4 from './DualShock4';
 import GradientBackgroundsCarousel from './GradientBackgroundsCarousel';
@@ -36,7 +37,7 @@ const products = [
   },
 ]
 
-export default class App extends PureComponent {
+class App extends PureComponent {
   state = {
     isOpen: false,
   }
@@ -77,3 +78,5 @@ export default class App extends PureComponent {
     );
   }
 }
+
+registerRootComponent(App);

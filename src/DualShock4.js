@@ -184,7 +184,7 @@ export default class DualShock4 extends PureComponent {
         ])}
       >
         <Heading3>
-          MAGMA RED
+          {this.props.item.title}
         </Heading3>
       </Animated.View>
     ) : null;
